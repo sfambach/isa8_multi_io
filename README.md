@@ -13,7 +13,7 @@
 - Option ROM: 28C256 for XT-IDE Universal BIOS and Multi-Floppy BIOS
 - Addresses by DIP switch, IRQ/DMA by jumper, through-hole parts, glue logic in three ATF22V10C GALs
 
-Details: [docs/design.md](docs/design.md)
+Details: [docs/design.md](docs/design.md) · How the GAL glue logic works: [docs/gal-explained.md](docs/gal-explained.md)
 
 ## License
 

@@ -26,7 +26,7 @@ Rule: DIP switches select addresses and enable blocks, jumpers select IRQ, DMA a
 
 ## Address decoding (GALs, ATF22V10C)
 
-Sources and JEDEC files in [`../gal`](../gal). Assembled with GALasm 2.1 ([daveho/GALasm](https://github.com/daveho/GALasm), CRLF JEDEC output). The equations are checked against the address map by [`../tests/check_gal.py`](../tests/check_gal.py); the GALs have not been tested in hardware yet. How to assemble and program: [gal-programming.md](gal-programming.md).
+Sources and JEDEC files in [`../gal`](../gal). Assembled with GALasm 2.1 ([daveho/GALasm](https://github.com/daveho/GALasm), CRLF JEDEC output). The equations are checked against the address map by [`../tests/check_gal.py`](../tests/check_gal.py); the GALs have not been tested in hardware yet. How they work: [gal-explained.md](gal-explained.md). How to assemble and program: [gal-programming.md](gal-programming.md).
 
 | GAL | Inputs | Outputs |
 |---|---|---|
