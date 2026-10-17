@@ -1,0 +1,42 @@
+GAL22V10
+IDE
+
+A0    A1    A2    A3    A4    A5    A6    A7    A8    A9    AEN   GND
+IOR   IOW   IS    IDEEN CS0   CS1   DIOR  DIOW  HWR   HRDOE IDESEL VCC
+
+/CS0    = A9 * A8 * /A7 * /A6 * A5 * /A4 * /A3 * /AEN * IDEEN * IS
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * /A3 * /AEN * IDEEN * /IS
+
+/CS1    = A9 * A8 * /A7 * /A6 * A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * IS
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * /IS
+
+/DIOR   = A9 * A8 * /A7 * /A6 * A5 * /A4 * /A3 * /AEN * IDEEN * IS * /IOR
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * /A3 * /AEN * IDEEN * /IS * /IOR
+        + A9 * A8 * /A7 * /A6 * A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * IS * /IOR
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * /IS * /IOR
+
+/DIOW   = A9 * A8 * /A7 * /A6 * A5 * /A4 * /A3 * /AEN * IDEEN * IS * /IOW
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * /A3 * /AEN * IDEEN * /IS * /IOW
+        + A9 * A8 * /A7 * /A6 * A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * IS * /IOW
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * A3 * A2 * A1 * /AEN * IDEEN * /IS * /IOW
+
+/HWR    = A9 * A8 * /A7 * /A6 * A5 * /A4 * A3 * /A2 * /A1 * /A0 * /AEN * IDEEN * IS * /IOW
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * A3 * /A2 * /A1 * /A0 * /AEN * IDEEN * /IS * /IOW
+
+/HRDOE  = A9 * A8 * /A7 * /A6 * A5 * /A4 * A3 * /A2 * /A1 * /A0 * /AEN * IDEEN * IS * /IOR
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * A3 * /A2 * /A1 * /A0 * /AEN * IDEEN * /IS * /IOR
+
+/IDESEL = A9 * A8 * /A7 * /A6 * A5 * /A4 * /AEN * IDEEN * IS
+        + A9 * A8 * /A7 * /A6 * /A5 * /A4 * /AEN * IDEEN * /IS
+
+DESCRIPTION
+
+isa8_multi_io - GAL U? (IDE decoder), XT-IDE compatible register map.
+Base 300h (IS=0) or 320h (IS=1), 16-byte window, A4 must be 0.
+  base+0..7  IDE CS0 registers (data low byte on card bus)
+  base+8     high byte latch: write -> HWR clocks 74HCT574 (OE = DIOW),
+             read -> HRDOE enables read latch (74HCT574, CLK = DIOR)
+  base+E..F  IDE CS1 registers (alternate status / device control)
+High-speed mode (XUB "XT-IDE rev 2 / chuck mod") swaps ISA A0 and A3
+with jumpers before this GAL and before IDE DA0; the equations stay the same.
+IDESEL is the unqualified address match for the bus buffer GAL.

@@ -1,0 +1,30 @@
+GAL22V10
+BUSCTL
+
+A15   A16   A17   A18   A19   ROMEN RS0   RS1   IDESEL FDCCS UARTCS GND
+LPTSEL DACK IOR   IOW   MEMR  MEMW  ROMCE BUFEN BUFDIR LPTSTB NC1  VCC
+
+/ROMCE  = A19 * A18 * /A17 * /A16 * A15 * ROMEN * /RS1 * /RS0
+        + A19 * A18 * /A17 * A16 * /A15 * ROMEN * /RS1 * RS0
+        + A19 * A18 * /A17 * A16 * A15 * ROMEN * RS1 * /RS0
+        + A19 * A18 * A17 * /A16 * /A15 * ROMEN * RS1 * RS0
+
+/BUFEN  = /IDESEL * /IOR + /FDCCS * /IOR + /UARTCS * /IOR + /LPTSEL * /IOR
+        + /DACK * /IOR + /ROMCE * /MEMR
+        + /IDESEL * /IOW + /FDCCS * /IOW + /UARTCS * /IOW + /LPTSEL * /IOW
+        + /DACK * /IOW + /ROMCE * /MEMW
+
+/BUFDIR = /IDESEL * /IOR + /FDCCS * /IOR + /UARTCS * /IOR + /LPTSEL * /IOR
+        + /DACK * /IOR + /ROMCE * /MEMR
+
+/LPTSTB = /LPTSEL * /IOR + /LPTSEL * /IOW
+
+DESCRIPTION
+
+isa8_multi_io - GAL U? (ROM select, bus buffer control, LPT strobe).
+ROM 28C256 (32 KiB): RS1 RS0 = 00 C8000h, 01 D0000h, 10 D8000h, 11 E0000h,
+ROMEN=1 enables. ROM OE = MEMR, WE = MEMW via write-enable DIP switch.
+BUFEN/BUFDIR drive the 74HCT245 between ISA D0-D7 (A side) and the
+card data bus (B side): DIR low = card to ISA (read cycles, incl. FDC DMA
+read with DACK + IOR).
+LPTSTB enables the 74HCT138 that splits LPT reads/writes by A0, A1, IOR.

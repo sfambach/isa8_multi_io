@@ -1,0 +1,25 @@
+GAL22V10
+IOBASE
+
+A2    A3    A4    A5    A6    A7    A8    A9    AEN   FDCEN FS    GND
+UARTEN US0  US1   LS0   LS1   NC1   NC2   NC3   FDCCS UARTCS LPTSEL VCC
+
+/FDCCS  = A9 * A8 * A7 * A6 * A5 * A4 * /A3 * /AEN * FDCEN * /FS
+        + A9 * A8 * /A7 * A6 * A5 * A4 * /A3 * /AEN * FDCEN * FS
+
+/UARTCS = A9 * A8 * A7 * A6 * A5 * A4 * A3 * /AEN * UARTEN * /US1 * /US0
+        + A9 * /A8 * A7 * A6 * A5 * A4 * A3 * /AEN * UARTEN * /US1 * US0
+        + A9 * A8 * A7 * A6 * A5 * /A4 * A3 * /AEN * UARTEN * US1 * /US0
+        + A9 * /A8 * A7 * A6 * A5 * /A4 * A3 * /AEN * UARTEN * US1 * US0
+
+/LPTSEL = A9 * A8 * /A7 * A6 * A5 * A4 * A3 * /A2 * /AEN * /LS1 * LS0
+        + A9 * /A8 * /A7 * A6 * A5 * A4 * A3 * /A2 * /AEN * LS1 * /LS0
+        + A9 * A8 * A7 * /A6 * A5 * A4 * A3 * A2 * /AEN * LS1 * LS0
+
+DESCRIPTION
+
+isa8_multi_io - GAL U? (I/O base decoder).
+FDC   : 3F0h-3F7h (FS=0) or 370h-377h (FS=1), FDCEN=1 enables.
+UART  : US1 US0 = 00 3F8h, 01 2F8h, 10 3E8h, 11 2E8h, UARTEN=1 enables.
+LPT   : LS1 LS0 = 00 off, 01 378h, 10 278h, 11 3BCh (4-byte window).
+All address-only selects; FDC and UART get IOR/IOW directly.
