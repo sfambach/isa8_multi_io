@@ -15,6 +15,31 @@ flowchart LR
 
 The `.pld` files in [`../gal`](../gal) describe these terms as text. GALasm turns them into a `.jed` fuse map; the programmer (XGecu T48) burns it into the chip. The chip can be erased and reprogrammed, so a wrong equation costs a reprogram, not a new board.
 
+## Anatomy of a `.pld` file
+
+Example: [`../gal/iobase.pld`](../gal/iobase.pld), shortened.
+
+```
+GAL22V10                                                   (1) chip type
+IOBASE                                                     (2) signature, max. 8 characters
+
+A2    A3    A4    A5    A6    A7    A8    A9    AEN   FDCEN FS    GND     (3) pins 1-12
+UARTEN US0  US1   LS0   LS1   NC1   NC2   NC3   FDCCS UARTCS LPTSEL VCC   (4) pins 13-24
+
+/FDCCS  = A9 * A8 * A7 * A6 * A5 * A4 * /A3 * /AEN * FDCEN * /FS          (5) equations
+        + A9 * A8 * /A7 * A6 * A5 * A4 * /A3 * /AEN * FDCEN * FS
+
+DESCRIPTION                                                (6) free text, ignored
+```
+
+1. **Chip type**: `GAL22V10` (fits ATF22V10C).
+2. **Signature**: a name stored in the chip, handy to tell the three GALs apart.
+3. and 4. **Pin list**: 24 names in pin order, 12 per line, exactly as on the DIP-24 package. Pin 12 must be `GND`, pin 24 `VCC`. `NC` marks an unused pin. The name is all GALasm knows about a pin – whether it is an input or an output follows from whether an equation assigns it.
+5. **Equations**: one per output pin. A line starting with `+` continues the previous equation (another OR term). Each output may only be assigned once.
+6. **DESCRIPTION**: everything after this keyword is a comment.
+
+`galasm iobase.pld` writes four files: `.jed` (fuse map for the programmer – the only file you need), `.pin` (pin list as GALasm understood it), `.chp` (pinout drawing) and `.fus` (fuse map in readable form). If something is wrong (unknown name, too many terms on a pin), GALasm stops with the line number.
+
 ## Reading an equation
 
 ```
