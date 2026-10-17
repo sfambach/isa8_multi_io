@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "isa8")(type "KiCad")(uri "${KIPRJMOD}/isa8.kicad_sym")(options "")(descr "isa8_multi_io symbols"))
+)
