@@ -26,7 +26,7 @@ Rule: DIP switches select addresses and enable blocks, jumpers select IRQ, DMA a
 
 ## Address decoding (GALs, ATF22V10C)
 
-Sources in [`../gal`](../gal) (galasm syntax). JEDEC files will be added once assembled and checked.
+Sources and JEDEC files in [`../gal`](../gal). Assembled with GALasm 2.1 ([daveho/GALasm](https://github.com/daveho/GALasm), CRLF JEDEC output). The equations are checked against the address map by [`../tests/check_gal.py`](../tests/check_gal.py); the GALs have not been tested in hardware yet. How to assemble and program: [gal-programming.md](gal-programming.md).
 
 | GAL | Inputs | Outputs |
 |---|---|---|
@@ -41,7 +41,7 @@ The bus buffer only drives ISA D0–D7 in read cycles that belong to this card
 
 - Check whether FDC CS must skip 3F6h/376h (IDE alternate status on AT machines).
 - Board outline, ISA bracket (DE9 + DB25, 3D-printed) and connector placement.
-- Verify GAL sources with galasm and in a real XT and AT.
+- Test the programmed GALs in a real XT and AT.
 
 ## Basis and references
 
