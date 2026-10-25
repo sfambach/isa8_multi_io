@@ -1,6 +1,6 @@
 # isa8_multi_io – Design
 
-Status: concept, schematic not started. Nothing here has been built or tested.
+Status: schematic drawn ([PDF](../hardware/kicad/isa8_multi_io-schematic.pdf)), no PCB yet. Nothing here has been built or tested.
 
 ## Goals
 
@@ -37,10 +37,54 @@ Sources and JEDEC files in [`../gal`](../gal). Assembled with GALasm 2.1 ([daveh
 The bus buffer only drives ISA D0–D7 in read cycles that belong to this card
 (I/O read of a selected block, FDC DMA with DACK + IOR, or a memory read of the ROM).
 
+## Key decisions
+
+- No open-source card combined floppy and IDE on one 8-bit board, so this is a new design.
+- Through-hole only, addresses by DIP switch, IRQ/DMA/power by jumper, affordable.
+- No Super-I/O chip (SMD only) and no FPGA (maybe a later version); glue logic in three GALs instead of 74688/74138 decoders.
+- Floppy section after Monster FDC; the IDE part is redrawn (XT-IDE is GPL-3 and cannot be mixed into a CERN-OHL-S design).
+- No game port (usually on the sound card).
+- 44-pin IDE power from ISA only for SSD/DOM/CF; real 2.5" disks need the Berg connector.
+
+## Settings
+
+DIP switches: ON = 1.
+
+| Switch | Function | OFF | ON |
+|---|---|---|---|
+| SW1-1 | IDE | disabled | enabled |
+| SW1-2 | IDE base | 300h | 320h |
+| SW1-3 | ROM | disabled | enabled |
+| SW1-4/5 | ROM base (S0/S1) | see below | |
+| SW1-6 | ROM write | protected | allowed |
+| SW1-7 | Floppy | disabled | enabled |
+| SW1-8 | Floppy base | 3F0h | 370h |
+| SW2-1 | Serial | disabled | enabled |
+| SW2-2/3 | Serial base (S0/S1) | see below | |
+| SW2-4/5 | Parallel base (S0/S1) | see below | |
+
+| S1 S0 | ROM | Serial | Parallel |
+|---|---|---|---|
+| 0 0 | C8000h | 3F8h | off |
+| 0 1 | D0000h | 2F8h | 378h |
+| 1 0 | D8000h | 3E8h | 278h |
+| 1 1 | E0000h | 2E8h | 3BCh |
+
+| Jumper | Function | Setting |
+|---|---|---|
+| JP1 + JP2 | IDE high-speed (A0/A3 swap) | both 1-2 standard, both 2-3 high-speed |
+| JP3 | 44-pin IDE power | 1-2 ISA (via PTC), 2-3 Berg |
+| JP4 | +5 V on floppy pin 3 | fitted = on |
+| JP5 + JP6 | Floppy DMA | both 1-2 DMA 2, both 2-3 DMA 3 |
+| JP7 | Floppy IRQ 6 | fitted = on |
+| JP8 | Serial IRQ | one jumper: IRQ 3/4/5/7 |
+| JP9 | Parallel IRQ | 1-2 IRQ 7, 2-3 IRQ 5, open = off |
+
 ## Open points
 
 - Check whether FDC CS must skip 3F6h/376h (IDE alternate status on AT machines).
-- Board outline, ISA bracket (DE9 + DB25, 3D-printed) and connector placement.
+- PCB: board outline, footprints for ISA edge and Berg connector, ISA bracket (DE9 + DB25, 3D-printed) with 2D dimension drawing.
+- Optional module header for a second IDE channel (isa8_ssd_controller), not decided.
 - Test the programmed GALs in a real XT and AT.
 
 ## Basis and references
